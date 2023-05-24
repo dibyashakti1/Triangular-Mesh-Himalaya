@@ -3,6 +3,11 @@ Set of routines for generating triangular mesh of the Himalayan megathrust by us
 
 The set of routines contain three main codes (R1, R2, and R3) and a few simple finctions to generate the triangular mesh.
 
+Issue 1 : Some of the triangles close to the updip and downsip edge are irregular in shape. Not a problem if you are using the mesh in Blocks software, but may be an issue in other coupling codes which used laplacian smoothing.
+
+Issue 2 : Few manual steps inside the codes. Needs a careful compilation of the codes.
+
+
 # Routine-1: (Imp: Don't clear workspace variables)
 
 This part of the routine generates trace of Downdip Edge of the Himalayan megathrust by combining data from USGS Slab 2.0 Grid File. Important to have a well defined downdip edge of the fault plane, that's why trace of downdip obtained from Slab 2.0.
@@ -47,7 +52,4 @@ This part of the routine generates the triangular mesh based on "Delaunay Triang
 ![untitled8](https://github.com/dibyashakti1/Triangular-Mesh-Himalaya/assets/123026357/b56b0da4-c82e-42d5-82fe-8a463e4e1edb)
 
 
-**Issues : Some of the triangles close to the updip and downsip edge are irregular in shape. Not a problem if you are using the mesh in Blocks software, but may be an issue in other coupling codes which used laplacian smoothing.**
-
-**Issues : Few manual steps inside the codes. Needs a careful observation.**
-
+**Feel free to contact me if you need any help.**
