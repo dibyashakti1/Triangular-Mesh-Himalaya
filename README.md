@@ -1,7 +1,7 @@
 # Triangular-Mesh-Himalaya
 Set of routines for generating triangular mesh of the Himalayan megathrust by using delaunay triangulation method. Also, this considers the Slab 2.0 model of USGS to define the megathrust geometry and downdip edge. This triangular mesh code may work for other east-west and north-south oriented megathrusts (may need bit of tweaking though).
 
-The set of routines contain three main codes (R1, R2, and R3) and a few simple finctions to generate the triangular mesh. Remember to add the folder and sub-folder to MATLAB path.
+**The set of routines contain three main codes (R1, R2, and R3) and a few simple finctions to generate the triangular mesh. Remember to add the folder and sub-folder to MATLAB path.**
 
 Issue 1 : Some of the triangles close to the updip and downsip edge are irregular in shape. Not a problem if you are using the mesh in Blocks software, but may be an issue in other coupling codes which used laplacian smoothing.
 
