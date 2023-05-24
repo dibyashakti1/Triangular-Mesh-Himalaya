@@ -5,8 +5,6 @@ The set of routines contain three main codes (R1, R2, and R3) and a few simple f
 
 # Routine-1: (Imp: Don't clear workspace variables)
 
-This part of the routine generates trace of Downdip Edge of the Himalayan megathrust by combining data from USGS Slab 2.0 Grid File
+This part of the routine generates trace of Downdip Edge of the Himalayan megathrust by combining data from USGS Slab 2.0 Grid File. Important to have a well defined downdip edge of the fault plane, that's why trace of downdip obtained from Slab 2.0.
 
-Important to have a well defined downdip edge of the fault plane, that's why trace of downdip obtained from Slab 2.0 
-
-Fault updip boundary may depend upon the user
+Fault updip boundary may depend upon the user (May obtain from the Blocks software).
