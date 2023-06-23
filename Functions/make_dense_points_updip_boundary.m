@@ -23,16 +23,17 @@ m=lin_fit(1);  % Slope of the linear fit
 c=lin_fit(2);  % Constant of the linear fit
 
 lon_m=[lon(i,:):n:lon(i+1,:)];
+lon_m=[lon_m,lon(i+1,:)];
 
-if length(lon_m)>=2
-
-if lon(i+1,:)>lon_m(2)
-
-    lon_m=[lon_m,lon(i+1,:)];
-
-end
-
-end
+% if length(lon_m)>=2
+% 
+% if lon(i+1,:)>lon_m(2)
+% 
+%     lon_m=[lon_m,lon(i+1,:)];
+% 
+% end
+% 
+% end
 
 if lon(i,:)>=lon(i+1,:)
 
