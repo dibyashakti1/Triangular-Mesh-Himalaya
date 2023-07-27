@@ -22,7 +22,7 @@ y_poly = data(:,2);
 % y_poly = lat3(k);
 
 % Set the spacing of the points
-spacing = 0.45;
+spacing = 0.25;
 
 % Define the x and y ranges
 x_range = min(x_poly):spacing:max(x_poly);
@@ -115,11 +115,25 @@ centroid_f=[centroid,pt_dep'];
 
 %% Save .mat file for blocks input
 
-c=[x_inside,y_inside,Depth];  % c: (nc x 3) double, contains lon,lat,depth(negative) for each vertex
+c=[x_inside,y_inside,-Depth];  % c: (nc x 3) double, contains lon,lat,depth(negative) for each vertex
 nc=length(c);  % nc: int, number of vertices
 nEl=length(T_new); % nEl: int, number of triangles
 v=T_new; % v: (nEl x 3) int, contains triples of vertex IDs for each triangle
 
-save('Himalaya_delaunay_mesh.mat','c','nc','nEl','v');
+save('Himalaya_delaunay_mesh_new.mat','c','nc','nEl','v');
+
+%% Save output file for unicycle input
+
+c1=[(1:length(c))',y_inside,x_inside,Depth];
+fileID = fopen('Himalaya_delaunay_mesh_new.ned','w');
+fprintf(fileID,'%7.6f  %7.6f  %7.6f %7.6f\n',c1.');
+fclose(fileID);
+
+c2=[(1:length(T_new))',v,zeros(length(v),1)];
+fileID = fopen('Himalaya_delaunay_mesh_new.tri','w');
+fprintf(fileID,'%.f %.f  %.f  %.f %.f\n',c2.');
+fclose(fileID);
+
+
 
 
