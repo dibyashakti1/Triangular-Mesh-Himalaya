@@ -3,7 +3,7 @@
 % Important for calculating distance and assign depth values to the points in between the polygon (both updip and downdip)
 % Depth for each point=(dtop/(dtop+dbotm))*(Dmax) : Dmax will be gathered from the depth values from downdip boundary of Slab 2.0 
 
-% by D. Panda (19 Apr, 2023)
+% Last modified : D. Panda (7 Sep, 2023)
 
 %%
 
@@ -12,7 +12,7 @@ addpath(genpath(pwd));
 %%
 % User provideed updip trace of the polygon boundary of Himalayas (May obtain from the Blocks software)
 
-A=load("segments_him.txt");  % Load the txt file containing Lon, Lat values (i.e., Updip boundary)
+A=load("segments_him4.txt");  % Load the txt file containing Lon, Lat values (i.e., Updip boundary)
 lon=A(:,1);
 lat=A(:,2);
 plot(lon,lat,'r','LineWidth',1)
@@ -88,13 +88,13 @@ title('Downdip Edge boundary (Perfect)')
 
 %% Manual step 2: Have to add two points on the NE and NW corners to extend the downdip boundary  
 
-ne_pt=[94.884,30.202];  % User given point to extend the existing Slab 2.0 boundary further NE
+ne_pt=[94.658,29.685];  % User given point to extend the existing Slab 2.0 boundary further NE
 A=[data_botm2(1,1:2);ne_pt];
 edge1=make_dense_points(A);  % Function "make_dense_points" adds multiple points in between the User given points
 edge1=flipud(edge1);
 edge1(:,3)=mean(data_botm2(:,3));  % The extended synthetic points are given a mean depth values of the downdip edge boundary from Slab 2.0
 
-nw_pt=[74.126,35.454];  % User given point to extend the existing Slab 2.0 boundary further NW
+nw_pt=[75.409,34.319];  % User given point to extend the existing Slab 2.0 boundary further NW
 A=[data_botm2(end,1:2);nw_pt];
 edge2=make_dense_points(A);
 edge2(:,3)=mean(data_botm2(:,3));
@@ -114,10 +114,19 @@ final_poly=[lon_lat_f;data_botm2];
 
 % plot(final_poly(:,1),final_poly(:,2))
 
+%%
 
-
-
-
-
-
-
+% plot(final_poly(:,1),final_poly(:,2),'b')
+% hold on
+% % plot(final_poly(1:8:end,1),final_poly(1:8:end,2),'r')
+% plot(node(:,1),node(:,2),'r')
+% 
+% data=load('segments_him4.txt');  % Load the user provided txt file containing Lon, Lat values (i.e., Updip boundary)
+% data=make_dense_points_updip_boundary(data);  % Function to add multiple points in between the User given points (Can be change to refine the triangle mesh)
+% 
+% node=[data;data_f2(1:4:end,1:2)];
+% 
+% hdata.hmax = 0.3;
+% options.dhmax = 2;
+% 
+% [P,T] = mesh2d(node,[],hdata);  % Generate 2D mesh
