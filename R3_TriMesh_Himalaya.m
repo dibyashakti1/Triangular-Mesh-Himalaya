@@ -1,65 +1,41 @@
 % Routine-3: (Imp: Don't clear workspace variables)
-% This part of the routine generates the triangular mesh based on "Delaunay Triangulation" method
+% This part of the routine generates smooth triangular mesh based on MATLAB's mesh2d function
+
+% MESH2D: 2D unstructured mesh generation for a polygon.
+%
+% A 2D unstructured triangular mesh is generated based on a piecewise-
+% linear geometry input. The polygon can contain an arbitrary number of 
+% cavities. An iterative method is implemented to optimise mesh quality. 
+
 % By assigning depth values to the points in between and on the polygon surface (both updip and downdip)
 % Depth for each point=(dtop/(dtop+dbotm))*(Dmax) : Dmax will be gathered from the depth values from downdip boundary of Slab 2.0 
 
-% by D. Panda (19 Apr, 2023)
+% Last modified : D. Panda (7 Sep, 2023)
 
 %%
 
 addpath(genpath(pwd));
 
-%% Load the trace of Updip boundary from Blocks
+%% Create the triangulation mesh
 
-data=load('segments_him.txt');  % Load the user provided txt file containing Lon, Lat values (i.e., Updip boundary)
-data=make_dense_points_updip_boundary(data);  % Function to add multiple points in between the User given points (Can be change to refine the triangle mesh)
-data=[data;data_f2(:,1:2)];  % Combined data from (1) txt file (i.e., Updip boundary) and (2) Downdip boundary from Slab 2.0 in Routine-1 
-x_poly = data(:,1);
-y_poly = data(:,2);
+data=load('segments_him4.txt');  % Load the user provided txt file containing Lon, Lat values (i.e., Updip boundary)
+% data=make_dense_points_updip_boundary(data);  % Function to add multiple points in between the User given points (Can be change to refine the triangle mesh)
 
-% Define the polygon boundary
-% x_poly = lon3(k);
-% y_poly = lat3(k);
+interval=4;   % Set the spacing of the points
+node=[data;data_f2(1:interval:end,1:2)];
 
-% Set the spacing of the points
-spacing = 0.25;
+% interval=8;   % Set the spacing of the points
+% node=[lon_lat_f(1:interval:end,1:2);data_botm2(1:interval:end,1:2)];
 
-% Define the x and y ranges
-x_range = min(x_poly):spacing:max(x_poly);
-y_range = min(y_poly):spacing:max(y_poly);
+hdata.hmax = 0.3;
+options.dhmax = 2;
 
-% Create a grid of points
-[X, Y] = meshgrid(x_range, y_range);
+[P,T] = mesh2d(node,[],hdata);  % Generate 2D mesh
 
-% Reshape the grid into a list of points
-x_points = reshape(X, [], 1);
-y_points = reshape(Y, [], 1);
-
-% Select only the points that lie inside and on the polygon
-inside = inpolygon(x_points, y_points, x_poly, y_poly);
-x_inside = [x_points(inside);x_poly]; % Considers points in and on the polygon surface
-y_inside = [y_points(inside);y_poly];
-
-figure(1)
-scatter(x_points(inside),y_points(inside),5,"black",'filled')
-hold on;
-plot(x_poly, y_poly, 'r', 'LineWidth', 1);
-title('Polygon Boundary and Points')
-
-%% Create the Delaunay triangulation
-T = delaunay(x_inside, y_inside);
-
-% Plot the polygon and the triangulation in 2D
 figure(2)
-triplot(T,x_inside,y_inside);
-title('Triangular Mesh in 2D (Not Perfect)')
-
-% Remove Bad Triangles outside the polygon boundary
-T_new = Remove_Bad_Triangles_2d(T,x_inside,y_inside,x_poly, y_poly);
-figure(3)
-triplot(T_new,x_inside,y_inside);
-title('Triangular Mesh in 2D (Perfect)')
-
+plot(final_poly(:,1),final_poly(:,2),'b')
+hold on
+plot(node(:,1),node(:,2),'r')
 
 %% Assigning depth values to the points in and on the polygon (both updip and downdip)
 
@@ -69,8 +45,7 @@ in_bound=unique(in_bound,'rows','stable'); % Removing any duplicating points cre
 out_bound=data_botm2(:,1:2); % Dense Downdip boundary from Routine-2 (Lon, Lat, Depth)
 out_bound=unique(out_bound,'rows','stable'); % Removing any duplicating points created during Routine-2
 
-pts_inside=[x_inside,y_inside];  % Considers points in and on the polygon surface
-
+pts_inside=P;       % Considers points in and on the polygon surface
 
 % Depth for each point=(dtop/(dtop+dbotm))*(Dmax) : Dmax will be gathered from the depth values from downdip boundary of Slab 2.0 
 
@@ -78,37 +53,44 @@ Depth=[];
 
 for i=1:length(pts_inside)
 
-dtop=min(pdist2(pts_inside(i,:),in_bound));
-dbotm=pdist2(pts_inside(i,:),out_bound);
-[id]=find(dbotm==min(dbotm));
-dbotm=dbotm(id);
+    dtop=min(pdist2(pts_inside(i,:),in_bound));
+    dbotm=pdist2(pts_inside(i,:),out_bound);
+    [id]=find(dbotm==min(dbotm));
 
-Depth=[Depth;(dtop/(dtop+dbotm))*data_botm2(id,3)];
+    if length(id)>1
+        id=id(1);
+    end
+
+    dbotm=dbotm(id);
+    Depth=[Depth;(dtop/(dtop+dbotm))*data_botm2(id,3)];
 
 end
 
 %% Plot the mesh based on Delaunay triangulation in 3D
 
 figure(4)
-trimesh(T_new,x_inside,y_inside,Depth*(-1))
+trimesh(T,P(:,1),P(:,2),Depth*(-1))
 title('Triangular Mesh in 3D')
 
 pt_dep=[]; % Estimating average depth of three vertices of triangular mesh
 
-for j=1:length(T_new)
-    pt_dep(j)=-(Depth(T_new(j,1))+Depth(T_new(j,2))+Depth(T_new(j,3)))/3;
+x_inside=P(:,1);
+y_inside=P(:,2);
+
+for j=1:length(T)
+    pt_dep(j)=-(Depth(T(j,1))+Depth(T(j,2))+Depth(T(j,3)))/3;
 end
 
 figure(5)
-trisurf(T_new,x_inside,y_inside,Depth*(-1),pt_dep)
+trisurf(T,P(:,1),P(:,2),Depth*(-1),pt_dep)
 title('Triangular Mesh in 3D, Depthwise')
 
 % Estimating Centroid of triangular mesh
 centroid=[];
 
-for i=1:length(T_new)
-    centr_lon=mean([x_inside(T_new(i,1)),x_inside(T_new(i,2)),x_inside(T_new(i,3))]);
-    centr_lat=mean([y_inside(T_new(i,1)),y_inside(T_new(i,2)),y_inside(T_new(i,3))]);
+for i=1:length(T)
+    centr_lon=mean([x_inside(T(i,1)),x_inside(T(i,2)),x_inside(T(i,3))]);
+    centr_lat=mean([y_inside(T(i,1)),y_inside(T(i,2)),y_inside(T(i,3))]);
     centroid=[centroid;centr_lon,centr_lat];
 end
 centroid_f=[centroid,pt_dep'];
@@ -117,23 +99,19 @@ centroid_f=[centroid,pt_dep'];
 
 c=[x_inside,y_inside,-Depth];  % c: (nc x 3) double, contains lon,lat,depth(negative) for each vertex
 nc=length(c);  % nc: int, number of vertices
-nEl=length(T_new); % nEl: int, number of triangles
-v=T_new; % v: (nEl x 3) int, contains triples of vertex IDs for each triangle
+nEl=length(T); % nEl: int, number of triangles
+v=T; % v: (nEl x 3) int, contains triples of vertex IDs for each triangle
 
-save('Himalaya_delaunay_mesh_new.mat','c','nc','nEl','v');
+% save('Himalaya_delaunay_mesh_new6.mat','c','nc','nEl','v');
 
 %% Save output file for unicycle input
 
-c1=[(1:length(c))',y_inside,x_inside,Depth];
-fileID = fopen('Himalaya_delaunay_mesh_new.ned','w');
-fprintf(fileID,'%7.6f  %7.6f  %7.6f %7.6f\n',c1.');
-fclose(fileID);
-
-c2=[(1:length(T_new))',v,zeros(length(v),1)];
-fileID = fopen('Himalaya_delaunay_mesh_new.tri','w');
-fprintf(fileID,'%.f %.f  %.f  %.f %.f\n',c2.');
-fclose(fileID);
-
-
-
-
+% c1=[(1:length(c))',y_inside,x_inside,Depth];
+% fileID = fopen('Himalaya_delaunay_mesh_new6.ned','w');
+% fprintf(fileID,'%7.6f  %7.6f  %7.6f %7.6f\n',c1.');
+% fclose(fileID);
+% 
+% c2=[(1:length(T))',v,zeros(length(v),1)];
+% fileID = fopen('Himalaya_delaunay_mesh_new6.tri','w');
+% fprintf(fileID,'%.f %.f  %.f  %.f %.f\n',c2.');
+% fclose(fileID);
