@@ -11,7 +11,7 @@ lat=A(:,2);
 % deg2km(a);
 
 lon_lat_f=[];
-n=0.5;   % Spacing of points. Small spacing = Dense points
+n=0.2;   % Spacing of points. Small spacing = Dense points
 
 
 for i=1:length(A)-1
