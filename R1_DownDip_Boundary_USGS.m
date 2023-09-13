@@ -3,7 +3,7 @@
 % Important to have a well defined downdip edge of the fault plane, that's why trace of downdip obtained from Slab 2.0 
 % Fault updip boundary may depend upon the user
 
-% by D. Panda (19 Apr, 2023)
+% Last modified : D. Panda (7 Sep, 2023)
 
 %%
 clear all
