@@ -1,9 +1,9 @@
 # Triangular-Mesh-Himalaya
-Set of routines for generating triangular mesh of the Himalayan megathrust by using delaunay triangulation method. Also, this considers the Slab 2.0 model of USGS to define the megathrust geometry and downdip edge. This triangular mesh code may work for other east-west and north-south oriented megathrusts (may need bit of tweaking though).
+Set of routines for generating triangular mesh of the Himalayan megathrust by using a 2D unstructured mesh method. Also, this considers the Slab 2.0 model of USGS to define the downdip megathrust geometry. This triangular mesh code may work for other east-west and north-south oriented megathrusts (may need bit of tweaking though).
 
 **The set of routines contain three main codes (R1, R2, and R3) and a few simple functions to generate the triangular mesh. Remember to add the folder and sub-folder to MATLAB path.**
 
-Issue 1 : Some of the triangles close to the updip and downsip edge are irregular in shape. Not a problem if you are using the mesh in Blocks software, but may be an issue in other coupling codes which used laplacian smoothing.
+Issue 1 : Some of the triangles close to the updip and downsip edge are irregular in shape. Not a problem if you are using the mesh in Blocks software, but might be an issue in other coupling inversion codes.
 
 Issue 2 : Few manual steps inside the codes. Needs a careful compilation of the codes.
 
@@ -40,7 +40,7 @@ Depth for each point=(dtop/(dtop+dbotm))*(Dmax) : Dmax will be gathered from the
 
 # Routine-3: (Imp: Don't clear workspace variables)
 
-This part of the routine generates the triangular mesh based on "Delaunay Triangulation" method and save the mesh in a .mat file (can be given as an input in Blocks). By assigning depth values to the points in between and on the polygon surface (both updip and downdip). The number of points inside and on the polygon surface can be changed to change the resolution of the triangular mesh.
+This part of the routine generates smooth triangular mesh based on MATLAB's mesh2d function and save the mesh in a mat file (can be given as an input in Blocks), as well as save output files for unicycle input during coupling inversion (ned and tri files). By assigning depth values to the points in between and on the megathrust polygon surface (both updip and downdip). The number of points inside and on the polygon surface can be changed to change the resolution of the triangular mesh.
 
 **Defining  points within the megathrust geometry. These points will be the vertices of the triangles**
 ![untitled6](https://github.com/dibyashakti1/Triangular-Mesh-Himalaya/assets/123026357/09de3521-41d1-4873-9cb6-a56e85a0c0ff)
