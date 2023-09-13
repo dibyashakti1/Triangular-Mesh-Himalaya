@@ -69,7 +69,7 @@ ne=[1:10];
 nw=[length(data_f2)-5:length(data_f2)];
 data_f2([ne,nw],:)=[];  % Manual step 1: May have to delete few points on either side of the boundary
 
-interval=5;  % Change interval for desired density of points on the downdip boundary
+interval=3;  % Change interval for desired density of points on the downdip boundary
 data_f2=data_f2(1:interval:end, :);
 
 figure (5)
@@ -80,13 +80,13 @@ title('Downdip Edge boundary (Perfect)')
 
 %% Manual step 2: Add two points on the NE and NW corners to extend the downdip boundary  
 
-ne_pt=[94.884,30.202];  % User given point to extend the existing Slab 2.0 boundary further NE
+ne_pt=[94.658,29.685];  % User given point to extend the existing Slab 2.0 boundary further NE
 A=[data_f2(1,1:2);ne_pt];
 edge1=make_dense_points_downdip_boundary(A);  % Function "make_dense_points_downdip_boundary" adds multiple points in between the last Slab 2.0 NE point and User given NE point
 edge1=flipud(edge1);
 edge1(:,3)=mean(data_f2(:,3));  % The extended synthetic points are given a mean depth values of the downdip edge boundary from Slab 2.0
 
-nw_pt=[74.126,35.454];  % User given point to extend the existing Slab 2.0 boundary further NW
+nw_pt=[75.409,34.319];  % User given point to extend the existing Slab 2.0 boundary further NW
 A=[data_f2(end,1:2);nw_pt];
 edge2=make_dense_points_downdip_boundary(A);
 edge2(:,3)=mean(data_f2(:,3));
@@ -98,6 +98,4 @@ plot(lon3(k), lat3(k), 'r', 'LineWidth', 1);
 hold on
 plot(data_f2(:,1), data_f2(:,2), '-bx', 'LineWidth', 1);
 title('Extended Downdip Edge boundary')
-
-
 
