@@ -42,11 +42,8 @@ Depth for each point=(dtop/(dtop+dbotm))*(Dmax) : Dmax will be gathered from the
 
 This part of the routine generates smooth triangular mesh based on MATLAB's mesh2d function and save the mesh in a mat file (can be given as an input in Blocks), as well as save output files for unicycle input during coupling inversion (ned and tri files). By assigning depth values to the points in between and on the megathrust polygon surface (both updip and downdip). The number of points inside and on the polygon surface can be changed to change the resolution of the triangular mesh.
 
-**Defining  points within the megathrust geometry. These points will be the vertices of the triangles**
-![untitled6](https://github.com/dibyashakti1/Triangular-Mesh-Himalaya/assets/123026357/09de3521-41d1-4873-9cb6-a56e85a0c0ff)
-
-**Generate the Delaunay triangular mesh based on megathrust geometry in 2D**
-![untitled7](https://github.com/dibyashakti1/Triangular-Mesh-Himalaya/assets/123026357/f64ca369-32e2-4dcc-8869-c02e20fd786d)
+**Generate the triangular mesh based on megathrust geometry in 2D**
+![mesh1](https://github.com/dibyashakti1/Triangular-Mesh-Himalaya/assets/123026357/cb031c62-310d-4933-b02c-0485a3d400cc)
 
 **Triangular mesh in 3D, by assigning depth values to each triangles**
 ![untitled8](https://github.com/dibyashakti1/Triangular-Mesh-Himalaya/assets/123026357/b56b0da4-c82e-42d5-82fe-8a463e4e1edb)
