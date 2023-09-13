@@ -46,7 +46,7 @@ This part of the routine generates smooth triangular mesh based on MATLAB's mesh
 ![mesh1](https://github.com/dibyashakti1/Triangular-Mesh-Himalaya/assets/123026357/74e78fa7-5510-4eae-8231-01e131c768ed)
 
 **Triangular mesh in 3D, by assigning depth values to each triangles**
-![mesh2](https://github.com/dibyashakti1/Triangular-Mesh-Himalaya/assets/123026357/303045b3-40fc-4b5b-a532-3152797d6754)
+![mesh2](https://github.com/dibyashakti1/Triangular-Mesh-Himalaya/assets/123026357/4a00da94-e8c4-441f-a884-29e16bcc22f1)
 
 
 **Feel free to contact me if you need any help.**
