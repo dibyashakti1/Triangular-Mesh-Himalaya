@@ -22,7 +22,7 @@ data=load('segments_him4.txt');  % Load the user provided txt file containing Lo
 % data=make_dense_points_updip_boundary(data);  % Function to add multiple points in between the User given points (Can be change to refine the triangle mesh)
 
 interval=4;   % Set the spacing of the points
-node=[data;data_f2(1:interval:end,1:2)];
+node=double([data;data_f2(1:interval:end,1:2)]);
 
 % interval=8;   % Set the spacing of the points
 % node=[lon_lat_f(1:interval:end,1:2);data_botm2(1:interval:end,1:2)];
